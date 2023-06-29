@@ -53,6 +53,10 @@ public class PersonService {
 
         toChange.setFirstName(person.getFirstName());
         toChange.setLastName(person.getLastName());
+        toChange.setUsername(person.getUsername());
+        toChange.setPassword(person.getPassword());
+        toChange.setEmail(person.getEmail());
+        toChange.setAuthLevel(person.getAuthLevel());
 
         personRepository.save(toChange);
 
