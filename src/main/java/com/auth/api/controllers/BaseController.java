@@ -1,12 +1,11 @@
 package com.auth.api.controllers;
 
+import com.auth.api.models.Encrypt;
 import com.auth.api.models.Person;
-import com.auth.api.models.PersonRepository;
 import com.auth.api.models.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,26 +18,6 @@ public class BaseController {
     public BaseController(PersonService temp)
     {
         _db = temp;
-    }
-
-    public static String hashSHA256(String input) {
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            byte[] hash = digest.digest(input.getBytes());
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if (hex.length() == 1) {
-                    hexString.append('0');
-                }
-                hexString.append(hex);
-            }
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @GetMapping("/home")
@@ -87,9 +66,8 @@ public class BaseController {
     @PostMapping("/add")
     public Person Add(@RequestBody Person person)
     {
-        String pepper = "coolbeans";
         String pass = person.getPassword();
-        person.setPassword(hashSHA256(pass + pepper));
+        person.setPassword(Encrypt.hashSHA256(pass));
         _db.addPerson(person);
 
         return person;

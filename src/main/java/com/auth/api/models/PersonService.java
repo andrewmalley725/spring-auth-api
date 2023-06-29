@@ -62,4 +62,9 @@ public class PersonService {
 
         return toChange;
     }
+
+    public Person getUser(String username)
+    {
+        return personRepository.findFirstByUsername(username);
+    }
 }
